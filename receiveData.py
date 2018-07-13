@@ -1,5 +1,5 @@
 '''
-recieveData.py
+receiveData.py
 
 Mohamed Ebsim
 
