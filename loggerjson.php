@@ -1,4 +1,18 @@
 <?php
+/*
+loggerjson.php
+
+Mohamed Ebsim
+
+Contqact Jesse Rogerson, @ jrogerson@ingeniumcanada.org
+Originally created on Jully 16, 2018
+-------------------------------------
+
+This program has the purpose of converting an MySQL
+database into a text format that a user can access via
+the internet. Formats into a JSON file.
+
+*/
 
 $username="";
 $password="";
