@@ -12,6 +12,12 @@ This program is a quick way of looking at changing data
 as it comes in from the arduino. Using processing, the
 data is graphed and is updated continously.
 
+-------------------------------------
+
+Resources Used:
+
+https://www.arduino.cc/en/Tutorial/Graph
+
 */
 
 // Libraries
