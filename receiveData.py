@@ -12,6 +12,13 @@ This program is made to read from the serial port and
 decode it in order for future use. It currently saves
 the data to an MySQL database.
 
+-------------------------------------
+
+Resources Used:
+
+https://www.tutorialspoint.com/python3/python_database_access.htm
+http://www.penguintutor.com/electronics/rpi-arduino
+
 '''
 
 #Import Libraries
