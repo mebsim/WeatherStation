@@ -11,6 +11,11 @@ Originally created on July 11, 2018
 This program is made to get sensor and return them via serial 
 transmission to the host computer. It periodically (every
 quarter second) returns a variety of formated sensor readings.
+-----------------------------
+Resources Used:
+
+https://github.com/adafruit/Adafruit_MPL3115A2_Library
+https://github.com/sparkfun/SparkFun_HIH4030_Arduino_Library
 
 */
 
