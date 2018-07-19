@@ -10,20 +10,17 @@ Originally created on Jully 11, 2018
 
 This program is made to read from the serial port and
 decode it in order for future use. It currently saves
-the data to a file for testing purposes and might
-change as the project progresses.
+the data to an MySQL database.
 
 '''
 
 #Import Libraries
 import serial
 import time
+import pymysql
 
 #Setting up serial connection through port ACM0 with a rate of 9600 baud
-ser = serial.Serial('/dev/ttyACM0', 9600)
-
-# Open a file (called "file") with the intention of adding to it 
-file = open('file', 'a')       
+ser = serial.Serial('/dev/ttyACM0', 9600)    
 
 # set basic values for the variables
 temp = 0 # temperature
@@ -32,6 +29,14 @@ altitude = 0 # altitude
 sV = 0 # sensor Voltage (for the humidity sensor)
 hum = 0 # relative humidity
 truhum = 0 # true relative humidity
+
+#Setting up for use of MySQL database
+username = ""
+password = ""
+databaseName = ""
+
+database = pymysql.connect("localhost",username,password,databaseName)
+cursor = database.cursor()
 
 '''
 This function has the job of recieving data from the serial port
@@ -61,7 +66,7 @@ def updateData():
     enough of a change to be worth changing the variable.
     '''
     if data.startswith('Temperature = '): #14 characters long
-        tempNew = float(data[14:-14])
+        tempNew = float(data[14:-4])
         if abs(temp-tempNew) > 0.:
             temp = tempNew
     if data.startswith('Altitude = '): #11 characters long
@@ -84,25 +89,36 @@ def updateData():
         truhumNew = float(data[24:-4])
         if abs(truhum-truhumNew) > 0.5:
             truhum = truhumNew
-    
-    # Writes the full data to file
-    file.write(data)
 
 x = 0
 
-# This python program currently only runs 50 times.
-while x < 50:
-    # Writes the time to file
-    file.write(time.asctime(time.localtime(time.time())) + "\n")
-    
+# This python program currently only runs 600 times.
+while x < 600:
     # Calls to update the data
     updateData()
+    if(x % 6 == 0):
+        #Finds time
+        timeDate = (time.strftime("%Y-%m-%d ") + time.strftime("%H:%M:%S"))
+        
+        # Command to add to table "log" the data
+        sql = ("""INSERT INTO log (datetime, temperature, pressure, altitude, sensorVoltage, humidity, trueHumidity) VALUES (%s,%s,%s,%s,%s,%s,%s)""",(timeDate,temp,pres,altitude,sV,hum,truhum))
+        
+        # Tries to run command and prints outcome
+        try:
+            print("Writing to database...")
+            cursor.execute(*sql)
+            database.commit()
+            print("Write Complete")
+        except:
+            database.rollback()
+            print("Failed writing to database")
     
-    # Increases 50 until the loop breaks
+    # Increases x until the loop breaks
     x+=1
 
-# Closes the file
-file.close()
+# Closes/terminates variables for database
+cursor.close()
+database.close()
 
 # Prints out the final data
 print(temp)
